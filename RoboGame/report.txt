@@ -1,0 +1,40 @@
+Student ID: 300574719
+Username: cobbalnath
+
+Attempted:
+
+    Stage 0:
+
+        Got the basic language working reasonably quickly after getting my head around what I was actually doing
+
+    Stage 1:
+
+        This stage took a little longer to properly implement COND grammar as the way I originally tried to do it did not work and had to rewrite a good portion of my parser
+
+    Stage 2:
+
+        I had actually completed most of the new grammar from the previous step and just needed to implement the new nodes and the else statements, which weren't too hard to do
+
+    Stage 3:
+
+        I didn't even attempt this stage as it was getting late and I had to finish up before I went insane.
+
+I tested everything up to stage 2 with a combonation of the Parser2Test file and a program that I will add below. This confirmed that everything worked as it should.
+
+move(8);
+turnL;
+loop {
+   while ( or(eq(numBarrels, 0), lt(add(oppFB, oppLR), add(barrelFB,barrelLR))) ) {
+      if (lt(oppFB,0)) { turnAround; }
+      else {if (gt(oppFB,0)) { move(add(1, div(oppFB, 2))); }
+            else {if (lt(oppLR,0)) { turnL;}
+                  else {if (gt(oppLR,0)) { turnR;}
+                        else {if (eq(oppLR,0)) { takeFuel; }}}}
+   }
+}
+if ( and(eq(barrelFB, 0),eq(barrelLR, 0))) { takeFuel; }
+else {if ( lt(barrelFB, 0) ){ turnAround; }
+      else {if ( gt(barrelFB, 0) ) { move(barrelFB); }
+            else {if ( lt(barrelLR, 0) ) { turnL; }
+                  else { if ( gt(barrelLR, 0) ) { turnR; }}}}}
+}
