@@ -26,9 +26,41 @@ public class AStar {
         if (start == null || goal == null) {return null;}
         timeOrDistance= (timeOrDistance.equals("time"))?"time":"distance";
 
-        //TODO
-        
-        return null;   // fix this!!!
+        PriorityQueue<PathItem> frontier = new PriorityQueue<>();
+        Map<Stop, Edge> cameFrom = new HashMap<>();
+        Map<Stop, Double> costSoFar = new HashMap<>();
+        Set<Stop> visited = new HashSet<>();
+
+        frontier.add(new PathItem(start, null, 0.0, heuristic(start, goal)));
+
+        while (!frontier.isEmpty()) {
+            PathItem current = frontier.poll();
+
+            if (current.getStop().equals(goal)) {
+                return reconstructedPath(cameFrom, current.getStop());
+            }
+
+            visited.add(current.getStop());
+
+            for (Edge edge : current.getStop().getEdges()) {
+                Stop next = edge.toStop();
+
+                if (visited.contains(next)) {
+                    continue;
+                }
+
+                double newCost = costSoFar.getOrDefault(current.getStop(), 0.0) + edgeCost(edge);
+
+                if (!costSoFar.containsKey(next) || newCost < costSoFar.get(next)) {
+                    costSoFar.put(next, newCost);
+                    double priority = newCost + heuristic(next, goal);
+                    frontier.add(new PathItem(next, edge, newCost, priority));
+                    cameFrom.put(next, edge);
+                }
+            }
+        }
+
+        return null;
     }
     
     private static List<Edge> reconstructedPath(Map<Stop, Edge> cameFrom, Stop current) {
